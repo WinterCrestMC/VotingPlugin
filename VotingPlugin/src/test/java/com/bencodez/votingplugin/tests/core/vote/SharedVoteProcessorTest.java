@@ -83,11 +83,35 @@ class SharedVoteProcessorTest {
         order.verify(ops).checkDayVoteStreak(user, false);
         order.verify(ops).setMonthTotal(user, 2);
         order.verify(ops).milestones(eq(user), any(UUID.class), eq(false));
+        order.verify(ops).cooldownRewards(eq(user), eq(site), eq(123L), eq(false), any(UUID.class));
         order.verify(ops).cooldown(user, site);
         order.verify(ops).voteStreak(eq(user), eq(123L), any(UUID.class));
         order.verify(ops).postVote(eq(site), eq(user), eq("Ben"), eq(123L), any(UUID.class), eq(false));
         order.verify(ops).updatePlaceholders(user);
         order.verify(ops).setUpdate();
+    }
+
+    @Test
+    void cooldownRewardsAreSkippedOnNonRewardBackendsUnlessVoteCameFromProxy() {
+        var local = accepted();
+        when(local.processRewards()).thenReturn(false);
+        when(local.incomingTime()).thenReturn(123L);
+
+        SharedVoteProcessor.process(local);
+
+        verify(local, never()).cooldownRewards(any(), any(), anyLong(), anyBoolean(), any());
+
+        var proxied = accepted();
+        UUID proxyId = UUID.randomUUID();
+        when(proxied.processRewards()).thenReturn(false);
+        when(proxied.proxyVote()).thenReturn(true);
+        when(proxied.forceProxyRouting()).thenReturn(true);
+        when(proxied.proxyVoteId()).thenReturn(proxyId);
+        when(proxied.incomingTime()).thenReturn(456L);
+
+        SharedVoteProcessor.process(proxied);
+
+        verify(proxied).cooldownRewards(user, site, 456L, true, proxyId);
     }
 
     @Test

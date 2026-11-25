@@ -122,9 +122,9 @@ class ConfigurableVoteCommandTest {
     @Test
     void syntheticPlayerAndAdminAliasesCannotReplaceRenamedRoot() throws Exception {
         for (boolean aliases : List.of(true, false)) {
-            for (String name : List.of("votetogglereminders", "adminvotesynthetic")) {
+            for (String name : List.of("votesynthetic", "adminvotesynthetic")) {
                 try (Fixture f = new Fixture(true, name, aliases)) {
-                    f.plugin.getVoteCommand().add(f.handler("ToggleReminders", "VotingPlugin.Commands.Vote.ToggleReminders"));
+                    f.plugin.getVoteCommand().add(f.handler("Synthetic", "VotingPlugin.Commands.Vote.Synthetic"));
                     f.plugin.getAdminVoteCommand().add(f.handler("Synthetic", "VotingPlugin.Commands.AdminVote.Synthetic"));
                     f.loader.loadAliases();
                     PluginCommand root = f.owned.get("vote");
@@ -144,17 +144,17 @@ class ConfigurableVoteCommandTest {
 
     @Test
     void disabledSyntheticAliasCannotUnregisterRenamedRoot() throws Exception {
-        try (Fixture f = new Fixture(true, "votetogglereminders", true)) {
+        try (Fixture f = new Fixture(true, "votesynthetic", true)) {
             var field = CommandLoader.class.getDeclaredField("disabledAliasCommandNames");
             field.setAccessible(true);
             @SuppressWarnings("unchecked") var disabled = (java.util.Set<String>) field.get(f.loader);
-            disabled.add("votetogglereminders");
+            disabled.add("votesynthetic");
             disabled.add("votegui");
             f.loader.loadAliases();
-            assertSame(f.owned.get("vote"), f.map.getCommand("votetogglereminders"));
-            assertSame(f.owned.get("vote"), f.map.getCommand("votingplugin:votetogglereminders"));
+            assertSame(f.owned.get("vote"), f.map.getCommand("votesynthetic"));
+            assertSame(f.owned.get("vote"), f.map.getCommand("votingplugin:votesynthetic"));
             assertTrue(f.loader.isVoteCommandEnabled());
-            assertTrue(f.map.dispatch(f.player, "votetogglereminders Help"));
+            assertTrue(f.map.dispatch(f.player, "votesynthetic Help"));
             assertEquals(1, f.executed.get());
             assertNull(f.map.getCommand("votegui"));
             assertNull(f.map.getCommand("vgui"));

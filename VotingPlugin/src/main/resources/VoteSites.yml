@@ -146,6 +146,36 @@ VoteSites:
       Messages:
         Player: 'You voted'
 
+    # Cooldown rewards (optional), useful for sites that allow voting every 6/12 hours.
+    # Each site has its own timer:
+    #   - First vote on this site, or first vote after CooldownHours since this site's
+    #     last MainReward -> MainReward, and the timer restarts from that vote.
+    #   - Any other vote on this site inside the cooldown -> SecondaryReward
+    # Works for offline votes (decided at vote time, given on next login).
+    # Every vote still counts towards totals, points, milestones and streaks.
+    # These run in addition to Rewards above / EverySiteReward, so keep those
+    # empty or message-only if you only want these.
+    # Placeholders in rewards: %SiteName%, %ServiceSite%, %NextMainReward% (e.g. 23h 59m)
+    # PlaceholderAPI: %VotingPlugin_CooldownRewardAvailable_<SiteKey>%  (true/false)
+    #                 %VotingPlugin_CooldownRewardTimeLeft_<SiteKey>%   (e.g. 5h 12m)
+    CooldownRewards:
+      Enabled: false
+      # Hours between MainRewards for this site (decimals allowed)
+      CooldownHours: 24
+      MainReward:
+        Commands:
+        - 'crates key give %player% vote 1'
+        Messages:
+          Player: '&aThanks for voting on %SiteName%! You received a &eVote Key&a.'
+      SecondaryReward:
+        # Fixed amount: Money: 20
+        # Random amount between Min and Max:
+        Money:
+          Min: 20
+          Max: 40
+        Messages:
+          Player: '&aThanks for voting on %SiteName%! Next key in &e%NextMainReward%&a.'
+
   # Site 2 example
   Site2:
     Enabled: false

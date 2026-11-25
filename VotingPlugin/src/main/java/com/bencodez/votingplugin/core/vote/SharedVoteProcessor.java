@@ -105,6 +105,9 @@ public final class SharedVoteProcessor {
         int enabledSiteCount();
         void setMonthTotal(U user, int total);
         void milestones(U user, UUID voteId, boolean forceProxyRouting);
+        /** Gives per-site main/secondary cooldown rewards; platforms without them keep this no-op. */
+        default void cooldownRewards(U user, S site, long voteTime, boolean forceProxyRouting, UUID voteId) {
+        }
         void cooldown(U user, S site);
         void voteStreak(U user, long voteTime, UUID voteId);
         void postVote(S site, U user, String playerName, long voteTime, UUID voteId, boolean cached);
@@ -251,6 +254,9 @@ public final class SharedVoteProcessor {
             }
         }
         ops.milestones(user, voteId, ops.forceProxyRouting());
+        if (ops.processRewards() || ops.proxyVote()) {
+            ops.cooldownRewards(user, site, voteTime, ops.forceProxyRouting(), voteId);
+        }
         ops.cooldown(user, site);
         ops.voteStreak(user, voteTime, voteId);
         ops.postVote(site, user, playerName, voteTime, voteId, cached);

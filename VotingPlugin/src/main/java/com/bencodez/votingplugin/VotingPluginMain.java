@@ -118,6 +118,7 @@ import com.bencodez.votingplugin.specialrewards.votemilestones.VoteMilestoneRewa
 import com.bencodez.votingplugin.specialrewards.votemilestones.VoteMilestonesManager;
 import com.bencodez.votingplugin.specialrewards.voteparty.VoteParty;
 import com.bencodez.votingplugin.specialrewards.voteparty.VotePartyRewardRegistrar;
+import com.bencodez.votingplugin.specialrewards.votecooldown.VoteCooldownRewardHandler;
 import com.bencodez.votingplugin.specialrewards.votestreak.VoteStreakHandler;
 import com.bencodez.votingplugin.specialrewards.votestreak.VoteStreakRewardRegistrar;
 import com.bencodez.votingplugin.test.VoteTester;
@@ -711,6 +712,9 @@ public class VotingPluginMain extends AdvancedCorePlugin {
 	@Getter
 	private VoteStreakHandler voteStreakHandler;
 
+	@Getter
+	private VoteCooldownRewardHandler voteCooldownRewardHandler;
+
 	/**
 	 * Registers a directly editable rewards path from SpecialRewards.yml.
 	 *
@@ -857,6 +861,8 @@ public class VotingPluginMain extends AdvancedCorePlugin {
 		
 		voteStreakHandler = new VoteStreakHandler(this);
 		voteStreakHandler.reload();
+
+		voteCooldownRewardHandler = new VoteCooldownRewardHandler(this);
 
 		registerCommands();
 		checkVotifier();

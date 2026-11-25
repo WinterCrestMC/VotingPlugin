@@ -84,6 +84,7 @@ public class UserManager {
 		manager.addKey(new UserDataKeyInt("BestDayVoteStreak"));
 		manager.addKey(new UserDataKeyString("DayVoteStreakLastUpdate").setColumnType("MEDIUMTEXT"));
 		manager.addKey(new UserDataKeyString(VoteMilestonesManager.getLIMITS_STORAGE_KEY()).setColumnType("LONGTEXT"));
+		manager.addKey(new UserDataKeyString("VoteCooldownRewardLastMain").setColumnType("LONGTEXT"));
 		manager.addKey(new UserDataKeyBoolean("Reminded"));
 		manager.addKey(new UserDataKeyBoolean("DisableBroadcast"));
 		manager.addKey(new UserDataKeyInt("WeekVoteStreak"));

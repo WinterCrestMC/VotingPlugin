@@ -176,6 +176,12 @@ public class PlayerVoteListener implements Listener {
             plugin.getVoteMilestonesManager().handleVote(user, event.getBungeeTextTotals(), forceProxyRouting,
                     voteId, new HashMap<String, String>());
         }
+        @Override public void cooldownRewards(VotingPluginUser user, VoteSite site, long voteTime,
+                boolean forceProxyRouting, UUID voteId) {
+            if (plugin.getVoteCooldownRewardHandler() != null) {
+                plugin.getVoteCooldownRewardHandler().processVote(user, site, voteTime, forceProxyRouting, voteId);
+            }
+        }
         @Override public void cooldown(VotingPluginUser user, VoteSite site) { plugin.getCoolDownCheck().vote(user, site); }
         @Override public void voteStreak(VotingPluginUser user, long voteTime, UUID voteId) {
             plugin.getVoteStreakHandler().processVote(user, voteTime, voteId);

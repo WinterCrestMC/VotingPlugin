@@ -69,6 +69,12 @@ commands:
   votetogglebroadcast:
     description: A command
     aliases: vtogglebroadcast
+  votetogglereminders:
+    description: Enable or disable vote reminders
+    aliases:
+    - togglevotereminders
+    - vtogglereminder
+    - vtoggle
   votepoints:
     description: A command
     aliases: vpoints

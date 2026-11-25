@@ -18,6 +18,10 @@ public final class VoteSiteRewardRegistrar {
 			plugin.addDirectlyDefinedRewards(DirectlyDefinedRewardPath.of(base + ".Rewards", plugin.getConfigVoteSites()));
 			plugin.addDirectlyDefinedRewards(DirectlyDefinedRewardPath.of(base + ".WaitUntilVoteDelayRewards",
 					plugin.getConfigVoteSites()));
+			plugin.addDirectlyDefinedRewards(DirectlyDefinedRewardPath.of(base + ".CooldownRewards.MainReward",
+					plugin.getConfigVoteSites()));
+			plugin.addDirectlyDefinedRewards(DirectlyDefinedRewardPath.of(base + ".CooldownRewards.SecondaryReward",
+					plugin.getConfigVoteSites()));
 			plugin.addDirectlyDefinedRewards(DirectlyDefinedRewardPath.of(base + ".CoolDownEndRewards",
 					plugin.getConfigVoteSites()));
 		}

@@ -33,6 +33,7 @@ import com.bencodez.advancedcore.api.user.UserDataChanged;
 import com.bencodez.advancedcore.api.user.UserDataFetchMode;
 import com.bencodez.simpleapi.messages.MessageAPI;
 import com.bencodez.votingplugin.VotingPluginMain;
+import com.bencodez.votingplugin.specialrewards.votecooldown.VoteCooldownRewardHandler;
 import com.bencodez.votingplugin.specialrewards.votemilestones.VoteMilestone;
 import com.bencodez.votingplugin.topvoter.TopVoter;
 import com.bencodez.votingplugin.topvoter.TopVoterPlayer;
@@ -674,6 +675,29 @@ public class PlaceHolders {
 		}.withDescription("Get total number of sites available to be voted on")));
 
 		for (final VoteSite voteSite : plugin.getVoteSiteManager().getVoteSitesEnabled()) {
+			placeholders.add(new PlaceHolder<VotingPluginUser>("CooldownRewardAvailable_" + voteSite.getKey()) {
+
+				@Override
+				public String placeholderRequest(VotingPluginUser user, String identifier) {
+					if (plugin.getVoteCooldownRewardHandler() == null) {
+						return "true";
+					}
+					return Boolean.toString(plugin.getVoteCooldownRewardHandler().getTimeUntilMain(user, voteSite) <= 0L);
+				}
+			}.withDescription("Whether the next vote on " + voteSite.getKey() + " gives its CooldownRewards MainReward")
+					.updateDataKey(VoteCooldownRewardHandler.DATA_KEY_LAST_MAIN));
+			placeholders.add(new PlaceHolder<VotingPluginUser>("CooldownRewardTimeLeft_" + voteSite.getKey()) {
+
+				@Override
+				public String placeholderRequest(VotingPluginUser user, String identifier) {
+					if (plugin.getVoteCooldownRewardHandler() == null) {
+						return "0m";
+					}
+					return VoteCooldownRewardHandler
+							.formatDuration(plugin.getVoteCooldownRewardHandler().getTimeUntilMain(user, voteSite));
+				}
+			}.withDescription("Time until a vote on " + voteSite.getKey() + " gives its CooldownRewards MainReward")
+					.updateDataKey(VoteCooldownRewardHandler.DATA_KEY_LAST_MAIN));
 			placeholders.add(new CalculatingPlaceholder<VotingPluginUser>("Next_" + voteSite.getKey()) {
 
 				@Override
